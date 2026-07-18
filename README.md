@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Připomenutí Plateb & Povinností
 
-## Getting Started
+Moderní, minimalistická a rychlá webová aplikace vytvořená v **Next.js**.
+Slouží k evidování, správě a vizuálnímu připomínání všech blížících se povinností a plateb (pojištění, energie, internet, služby, daně apod.). Aplikace je plně veřejná (bez nutnosti přihlašování), nabízí filtrování podle kategorií a barevně zvýrazňuje úkoly podle toho, za jak dlouho vyprší jejich termín splatnosti. Podporuje Dark Mode i Light Mode.
 
-First, run the development server:
+## 🛠️ Technologie
+* **Frontend:** Next.js (App Router), React, Tailwind CSS v4, Lucide React (ikony)
+* **Backend:** Next.js API Routes
+* **Databáze:** PostgreSQL
+* **ORM:** Drizzle ORM
+* **Úlohy na pozadí:** Vlastní TS skript zastupující Cron job
 
+## 🚀 Jak začít (Lokální spuštění)
+
+### 1. Prerekvizity
+* Nainstalovaný [Node.js](https://nodejs.org/).
+* Nainstalovaný a běžící [PostgreSQL](https://www.postgresql.org/) server na tvém lokálním počítači.
+
+### 2. Konfigurace databáze
+V kořenové složce projektu (`humblenext7`) byl vytvořen soubor `.env.local` s připojovacím řetězcem k databázi. 
+Pokud tvůj lokální PostgreSQL běží pod jiným uživatelem, heslem, nebo portem, uprav tuto proměnnou uvnitř `.env.local`:
+```env
+DATABASE_URL=postgresql://postgres:test@localhost:5432/postgres
+```
+*(Ujisti se, že databáze s názvem `postgres` na tvém databázovém serveru existuje. Pokud ne, nejprve ji vytvoř.)*
+
+### 3. Instalace závislostí
+Pokud ještě nejsou nainstalované, nainstaluj všechny potřebné balíčky pro frontend i backend:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 4. Nahrání schématu do databáze (Migrace)
+Aplikace používá **Drizzle ORM** pro komunikaci s databází. Aby se v tvé prázdné databázi vytvořila tabulka `tasks`, spusť následující příkaz:
+```bash
+npm run db:push
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+*(Tip: Kdykoliv si budeš chtít prohlédnout nebo přímo upravit data v databázi skrze přehledné UI, můžeš spustit `npm run db:studio`.)*
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 5. Spuštění vývojového serveru
+Nyní jsi připraven/a spustit samotnou Next.js webovou aplikaci:
+```bash
+npm run dev
+```
+Webová aplikace poté poběží ve tvém prohlížeči na adrese [http://localhost:3000](http://localhost:3000).
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## ⏰ Kontrola úkolů (Cron skript)
+Součástí projektu je také skript `scripts/cron.ts`, který načte data z databáze a do konzole přehledně vypíše všechny povinnosti, u kterých se blíží termín splatnosti (jsou splatné do 14 dnů nebo jsou už po splatnosti).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Skript můžeš kdykoliv spustit ručně příkazem:
+```bash
+npm run cron
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+*Pokud bys chtěl proces zcela automatizovat, můžeš si ve svém operačním systému (Plánovač úloh ve Windows nebo `cron` v Linuxu/Macu) nastavit pravidelné každodenní volání tohoto příkazu v této složce.*
