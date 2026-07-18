@@ -66,7 +66,7 @@ export default function Analytics({ tasks }: { tasks: Task[] }) {
                 ))}
               </Pie>
               <Tooltip 
-                formatter={(value: number) => [`${Math.round(value).toLocaleString('cs-CZ')} Kč/měsíc`, 'Částka']}
+                formatter={(value: any) => [`${Math.round(Number(value) || 0).toLocaleString('cs-CZ')} Kč/měsíc`, 'Částka']}
                 contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', backgroundColor: 'var(--color-background)' }}
                 itemStyle={{ color: 'var(--color-foreground)' }}
               />
