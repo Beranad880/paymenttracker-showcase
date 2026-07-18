@@ -22,3 +22,9 @@ export const paymentHistory = pgTable('payment_history', {
   repeat: text('repeat'),
   note: text('note'),
 });
+
+export const logs = pgTable('logs', {
+  id: serial('id').primaryKey(),
+  action: text('action').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
